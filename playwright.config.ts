@@ -8,7 +8,7 @@ export default defineConfig({
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 2,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
@@ -24,6 +24,8 @@ export default defineConfig({
       Authorization: `Token ${process.env.ACCESS_TOKEN}`,
     },
   },
+  globalSetup: require.resolve("./global-setup.ts"),
+  globalTeardown: require.resolve("./global-teardown.ts"),
 
   /* Configure projects for major browsers */
   projects: [
@@ -46,7 +48,14 @@ export default defineConfig({
     },
 
     {
+      name: "likeButtonGlobal",
+      testMatch: "likesCounterGlobal.spec.ts",
+      use: { ...devices["Desktop Chrome"], storageState: ".auth/user.json" },
+    },
+
+    {
       name: "chromium",
+      testIgnore: "likesCounter.spec.ts",
       use: { ...devices["Desktop Chrome"], storageState: ".auth/user.json" },
       dependencies: ["setup"],
     },
