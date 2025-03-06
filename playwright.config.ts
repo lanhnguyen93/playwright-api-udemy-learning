@@ -29,11 +29,11 @@ export default defineConfig({
   projects: [
     { name: "setup", testMatch: "auth.setup.ts" },
 
-    { name: "clean-up article", testMatch: "articleCleanup.setup.ts" },
+    { name: "clean-up article", testMatch: "article.teardown.ts" },
 
     {
       name: "setup article",
-      testMatch: "newArticle.setup.ts",
+      testMatch: "article.setup.ts",
       dependencies: ["setup"],
       teardown: "clean-up article",
     },
